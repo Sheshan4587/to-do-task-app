@@ -16,7 +16,7 @@ app.use("/static", express.static("public"));  //middleware to serve static file
 mongoose.connect(process.env.DB_CONNECT).then(() => {
     console.log("Connected to MongoDB!");  //log a message to the console when the connection to MongoDB is successful
     app.listen(3000, () => {
-        console.log('Example app listening on port 3000!');   //log a message to the console when the server starts listening on port 3000
+        console.log('App listening on port 3000!');   //log a message to the console when the server starts listening on port 3000
     });
 }).catch((error) => {
     console.error("Error connecting to MongoDB:", error);
@@ -32,8 +32,8 @@ app.post('/', (req, res) => {
     console.log(req.body);  //log the body of the POST request to the console
 });
 
-app.listen(3000, () => {
+/*app.listen(3000, () => {
     console.log('Example app listening on port 3000!');   //log a message to the console when the server starts listening on port 3000
-});
+});*/
 
 

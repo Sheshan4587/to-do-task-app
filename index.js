@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 
 const dotenv = require('dotenv'); // Load environment variables from .env file
+dotenv.config();  // Load environment variables from .env file
 
 app.use(express.urlencoded({ extended: true })); //middleware to parse the body of POST requests
 

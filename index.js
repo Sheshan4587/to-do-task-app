@@ -69,11 +69,8 @@ app.route('/remove/:id').get(async( req, res) => {
 app.route('/edit/:id').get(async (req, res) => {
     try {
         const id = req.params.id;  //get the id of the to-do task to be edited from the URL parameters
-        const taskToEdit = await TodoTask.findById(id);  //fetch the to-do task with the specified id from the database using the TodoTask model
-        if (!taskToEdit) {
-            return res.status(404).send("Task not found");
-        }
-        res.render('todoEdit.ejs', { taskedit: taskToEdit, idTask: id });  //This line renders the "todoEdit.ejs" template and passes two variables to it: "taskedit", which contains the to-do task that is being edited, and "idTask", which contains the id of the task being edited. This allows the "todoEdit.ejs" template to display the current content of the task and provide a form for editing it.
+        const tasks = await TodoTask.find({});  //fetch all tasks from the database to show alongside the one being edited
+        res.render('todoEdit.ejs', { taskedit: tasks, idTask: id });  //render the template with all tasks and the id of the task being edited
     } catch (error) {
         console.error("Error fetching todo task for editing:", error);  //log an error message to the console if there is an issue fetching the task from the database
         res.status(500).send("Error fetching todo task for editing");  //send an error response if there is an issue fetching the task from the database

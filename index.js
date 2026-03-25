@@ -6,6 +6,8 @@ const dotenv = require('dotenv'); // Load environment variables from .env file
 
 const mongoose = require('mongoose'); // Import Mongoose for MongoDB connection
 
+const TodoTask = require('./models/TodoTask'); // Import the TodoTask model to interact with the "TodoTask" collection in MongoDB
+
 dotenv.config();  // Load environment variables from .env file
 
 app.use(express.urlencoded({ extended: true })); //middleware to parse the body of POST requests

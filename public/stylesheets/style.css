@@ -5,7 +5,7 @@
 }
 
 body {
-    background: #e27442;
+    background: oklab(64.172% 0.10251 0.09895);
 }
 
 .todo-container {

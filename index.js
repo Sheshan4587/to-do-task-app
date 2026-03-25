@@ -26,8 +26,14 @@ mongoose.connect(process.env.DB_CONNECT).then(() => {
 
 app.set("view engine", "ejs"); //set the view engine to ejs, which allows us to render ejs templates in our routes
 
-app.get('/', (req, res) => {
-    res.render('todo.ejs');  //send "Hello World!" as the response when the root URL is accessed
+app.get('/', async (req, res) => {
+    try {
+        const tasks = await TodoTask.find({});  //fetch all to-do tasks from the database using the TodoTask model
+        res.render('todo.ejs', { todoTasks: tasks });  //render the "todo.ejs" template and pass the fetched tasks as a variable called "todoTasks"
+    } catch (error) {
+        console.error("Error fetching todo tasks:", error);
+        res.status(500).send("Error fetching todo tasks");
+    }
 });
 
 app.post('/', async (req, res) => {

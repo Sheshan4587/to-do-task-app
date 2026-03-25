@@ -31,7 +31,16 @@ app.get('/', (req, res) => {
 });
 
 app.post('/', (req, res) => {
-    console.log(req.body);  //log the body of the POST request to the console
+    const todoTask = new TodoTask({
+        content: req.body.content  //create a new instance of the TodoTask model with the content from the request body
+    });
+    try {
+        await todoTask.save();  //save the new to-do task to the database
+        res.redirect('/');  //redirect the user back to the root URL after saving the task
+    }catch (err) {
+        res.status(500).send(err);  //send an error response if there is an issue saving the task to the database
+        res.redirect('/');  //redirect the user back to the root URL even if there is an error.
+
 });
 
 /*app.listen(3000, () => {

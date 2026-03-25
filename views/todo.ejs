@@ -1,34 +1,66 @@
+<!-- Declares this document as HTML5. -->
 <!DOCTYPE html>
 
+<!-- Starts the head section containing metadata and linked resources. -->
 <head>
+    <!-- Sets the page title shown in the browser tab. -->
     <title>Todo App</title>
+    <!-- Links your local CSS file served from the /static path. -->
     <link rel="stylesheet" href="/static/stylesheets/style.css" type="text/css">
+    <!-- Loads Google Fonts used by this page. -->
     <link href="https://fonts.googleapis.com/css?family=Baloo+Bhai|Candal|Chewy&display=swap" rel="stylesheet">
+    <!-- Loads Font Awesome icons from a CDN. -->
+    <!-- Adds an integrity hash for security verification of the CDN file. -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
         integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+<!-- Closes the head section. -->
 </head>
 
+<!-- Starts the visible page body. -->
 <body>
+    <!-- Main wrapper for the todo app layout. -->
     <div class="todo-container">
         <h2>To-Do List</h2>
+        <!-- Container for form and list content. -->
         <div class="todo">
+            <!-- Form submits new todo content to the server using POST /. -->
             <form action="/" method="POST" class="todo-header">
+                <!-- Text input where user types a task. -->
                 <input type="text" name="content">
+                <!-- Submit button with plus icon to add a task. -->
                 <button type="submit"><span class="fas fa-plus"></span></button>
+            <!-- Closes the form. -->
             </form>
+
+            <!-- Starts unordered list that displays all todo items. -->
             <ul class="todo-list">
+                <%# Loops through each todo item passed from the server. %>
                 <% todoTasks.forEach(details => { %>
+                <!-- One list item for each task. -->
                 <li class="todo-list-item">
+                    <!-- Prints the task text content. -->
                     <div class="todo-list-item-name"><%= details.content %></div>
+                    <!-- Link to edit this specific task using its MongoDB id. -->
                     <a href="/edit/<%= details._id %>" class="edit">
+                        <!-- Edit icon. -->
                         <span class="fas fa-edit"></span>
+                    <!-- Closes edit link. -->
                     </a>
+                    <!-- Link to remove this specific task using its MongoDB id. -->
                     <a href="/remove/<%= details._id %>" class="remove">
+                        <!-- Remove icon. -->
                         <span class="fas fa-times"></span>
+                    <!-- Closes remove link. -->
                     </a>
+                <!-- Closes one task list item. -->
                 </li>
+                <%# Ends the forEach loop over todo tasks. %>
                 <% }) %>
+            <!-- Closes the unordered todo list. -->
             </ul>
+        <!-- Closes the inner todo container. -->
         </div>
+    <!-- Closes the main todo container. -->
     </div>
+<!-- Closes the page body. -->
 </body>

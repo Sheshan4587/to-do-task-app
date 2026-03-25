@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
     res.render('todo.ejs');  //send "Hello World!" as the response when the root URL is accessed
 });
 
-app.post('/', (req, res) => {
+app.post('/', async (req, res) => {
     const todoTask = new TodoTask({
         content: req.body.content  //create a new instance of the TodoTask model with the content from the request body
     });
@@ -39,8 +39,7 @@ app.post('/', (req, res) => {
         res.redirect('/');  //redirect the user back to the root URL after saving the task
     }catch (err) {
         res.status(500).send(err);  //send an error response if there is an issue saving the task to the database
-        res.redirect('/');  //redirect the user back to the root URL even if there is an error.
-
+    }
 });
 
 /*app.listen(3000, () => {

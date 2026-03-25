@@ -52,14 +52,17 @@ app.post('/', async (req, res) => {
     console.log('Example app listening on port 3000!');   //log a message to the console when the server starts listening on port 3000
 });*/
 
-app.route('/remove/:id').get((async, req, res) => {
+app.route('/remove/:id').get(async( req, res) => {
     try {
         const id = req.params.id;  //get the id of the to-do task to be removed from the URL parameters
-        await TodoTask.findByIdAndRemove(id);  //remove the to-do task with the specified id from the database using the TodoTask model
+        const deletedTask = await TodoTask.findByIdAndDelete(id);  //remove the to-do task with the specified id from the database using the TodoTask model
+        if (!deletedTask) {
+            return res.status(404).send("Task not found");
+        }
         res.redirect('/');  //redirect the user back to the root URL after removing the task
     } catch (error) {
-        console.error("Error removing todo task:", error);
-        res.status(500).send("Error removing todo task");
+        console.error("Error removing todo task:", error);  //log an error message to the console if there is an issue removing the task from the database
+        res.status(500).send("Error removing todo task");  //send an error response if there is an issue removing the task from the database
     }
 });
 

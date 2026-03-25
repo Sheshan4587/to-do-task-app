@@ -78,7 +78,7 @@ app.route('/edit/:id').get(async (req, res) => {
         console.error("Error fetching todo task for editing:", error);  //log an error message to the console if there is an issue fetching the task from the database
         res.status(500).send("Error fetching todo task for editing");  //send an error response if there is an issue fetching the task from the database
     }
-},post(async (req, res) => {
+}).post(async (req, res) => {
     try {
         const id = req.params.id;  //get the id of the to-do task to be edited from the URL parameters
         const updatedTask = await TodoTask.findByIdAndUpdate(id, { content: req.body.content });  //update the content of the to-do task with the specified id in the database using the TodoTask model
@@ -90,5 +90,5 @@ app.route('/edit/:id').get(async (req, res) => {
         console.error("Error updating todo task:", error);  //log an error message to the console if there is an issue updating the task in the database
         res.status(500).send("Error updating todo task");  //send an error response if there is an issue updating the task in the database
     }
-}));
+});
 

@@ -18,3 +18,7 @@ const todoTaskSchema = new mongoose.Schema({
 
 // Export the model based on the schema, which allows us to interact with the "TodoTask" collection in MongoDB using this model
 module.exports = mongoose.model('TodoTask', todoTaskSchema);
+
+/* In summary, this code defines a Mongoose schema and model for a to-do task, which includes a "content" field of type String and a
+"date" field of type Date. The model is then exported for use in other parts of the application, allowing us to interact with the "TodoTask" 
+collection in MongoDB using this model. */

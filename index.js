@@ -1,6 +1,7 @@
-//create a simple express server that listens on port 3000 and responds with "Hello World!" when the root URL is accessed.
-const express = require('express');
-const app = express();
+//create a simple to-do list application using Node.js, Express, and MongoDB. The application allows users to create, read, update, and delete to-do tasks. The tasks are stored in a MongoDB database, and the application uses EJS as the templating engine to render the views.
+const express = require('express');  //Import the Express framework to create the server and handle routing
+
+const app = express();  //Create an instance of the Express application to set up the server and define routes
 
 const dotenv = require('dotenv'); // Load environment variables from .env file
 

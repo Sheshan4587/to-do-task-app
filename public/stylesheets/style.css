@@ -1,120 +1,365 @@
-* {
+/* Import Google Fonts: Space Mono for monospace task text, Syne for display headings and UI labels */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
+
+/* Reset all default browser margins, paddings, and switch to border-box sizing
+   so padding and borders are included in element width/height calculations */
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    background: oklab(64.172% 0.10251 0.09895);
+/* Define global CSS custom properties (variables) for the futuristic dark theme.
+   Using variables makes it easy to update the color scheme from one place */
+:root {
+    --bg: #080c14;                          /* Deepest background — near black with a blue tint */
+    --surface: #0e1420;                     /* Card/panel background — slightly lighter than bg */
+    --surface-2: #141c2e;                   /* Input and list item background — one step lighter */
+    --border: rgba(99, 179, 255, 0.15);     /* Subtle blue-tinted border for most elements */
+    --border-bright: rgba(99, 179, 255, 0.4); /* Brighter border for focused/hovered states */
+    --accent: #3b9eff;                      /* Primary blue accent color for buttons and highlights */
+    --accent-glow: rgba(59, 158, 255, 0.25); /* Semi-transparent blue used for glow/shadow effects */
+    --accent-2: #00f5c4;                    /* Cyan/teal accent used for the animated heading dot */
+    --danger: #ff4d6d;                      /* Red/pink color for delete button and cancel actions */
+    --danger-glow: rgba(255, 77, 109, 0.2); /* Semi-transparent red used for danger hover backgrounds */
+    --text: #e8f0fe;                        /* Main text color — soft white with a blue tint */
+    --text-muted: #6b7fa3;                  /* Secondary/muted text for labels and placeholders */
+    --font-display: 'Syne', sans-serif;     /* Display font for headings and button labels */
+    --font-mono: 'Space Mono', monospace;   /* Monospace font for task text and inputs */
 }
 
+/* Center the app on the page using flexbox and set the dark background.
+   overflow-x: hidden prevents horizontal scrollbar from decorative background elements */
+body {
+    background: var(--bg);
+    min-height: 100vh;                      /* Ensure body fills the full viewport height */
+    display: flex;
+    align-items: center;                    /* Vertically center the todo card */
+    justify-content: center;               /* Horizontally center the todo card */
+    font-family: var(--font-display);
+    overflow-x: hidden;
+}
+
+/* First decorative background layer — two soft radial glows (blue top-right, cyan bottom-left)
+   that give the page depth. pointer-events: none ensures it doesn't block clicks */
+body::before {
+    content: '';
+    position: fixed;                        /* Fixed so it stays in place when scrolling */
+    inset: 0;                               /* Shorthand for top/right/bottom/left: 0 — fills the viewport */
+    background:
+        radial-gradient(ellipse 60% 40% at 70% 20%, rgba(59, 158, 255, 0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 20% 80%, rgba(0, 245, 196, 0.05) 0%, transparent 60%);
+    pointer-events: none;                   /* Allows clicks to pass through to elements behind it */
+    z-index: 0;                             /* Behind all content */
+}
+
+/* Second decorative background layer — a faint grid pattern made from two overlapping
+   linear gradients (horizontal and vertical lines) to create a futuristic grid effect */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(99, 179, 255, 0.03) 1px, transparent 1px),   /* Horizontal grid lines */
+        linear-gradient(90deg, rgba(99, 179, 255, 0.03) 1px, transparent 1px); /* Vertical grid lines */
+    background-size: 40px 40px;             /* Each grid cell is 40x40px */
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Main card container that holds the entire todo app.
+   z-index: 1 places it above the decorative background layers */
 .todo-container {
-    color: white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    padding: 20px;
-    width: 600px;
-    transform: translate(-50%,-50%);
-    background: rgba(255, 255, 255, 0.1);
+    position: relative;                     /* Needed so the ::before glowing line is positioned relative to this */
+    z-index: 1;                             /* Sits above the body::before and body::after decorations */
+    width: 580px;
+    padding: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 20px;
+    box-shadow:
+        0 0 0 1px rgba(59, 158, 255, 0.05),    /* Faint outer ring for subtle depth */
+        0 40px 80px rgba(0, 0, 0, 0.6),        /* Large dark shadow for floating card effect */
+        inset 0 1px 0 rgba(255, 255, 255, 0.04); /* Subtle inner highlight on the top edge */
+}
+
+/* Decorative glowing blue line across the top of the card.
+   Creates a "lit from above" effect using a gradient that fades at both ends */
+.todo-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 40px;                             /* Inset from edges so it doesn't reach the corners */
+    right: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent); /* Fades in and out */
+    opacity: 0.6;
+    border-radius: 1px;
+}
+
+/* "To-Do List" heading — uppercase, wide letter spacing, muted color for a terminal/HUD aesthetic */
+.todo-container h2 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;                 /* Wide spacing gives a futuristic label look */
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Animated cyan dot that appears before the heading text.
+   Acts like a status indicator light */
+.todo-container h2::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--accent-2);            /* Cyan color */
+    border-radius: 50%;                     /* Makes it a circle */
+    box-shadow: 0 0 10px var(--accent-2);   /* Glowing effect around the dot */
+    animation: pulse 2s ease-in-out infinite; /* Continuously pulses to simulate an active indicator */
+}
+
+/* Pulse animation — smoothly scales down and fades the dot to simulate a heartbeat/status pulse */
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }      /* Fully visible at start and end */
+    50% { opacity: 0.5; transform: scale(0.8); }       /* Fades and shrinks at midpoint */
+}
+
+/* Inner wrapper that holds the form and task list — fills full width of the card */
+.todo {
+    width: 100%;
+}
+
+/* Row containing the task text input and add button, laid out side by side */
+.todo-header {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Text input for typing a new task */
+.todo-header input {
+    flex: 1;                                /* Takes up all available space next to the button */
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-family: var(--font-mono);          /* Monospace font for a code/terminal feel */
+    font-size: 0.85rem;
+    color: var(--text);
+    outline: none;                          /* Remove default browser focus ring (replaced below) */
+    transition: border-color 0.2s, box-shadow 0.2s; /* Smooth focus transition */
+}
+
+/* Placeholder text color inside the new task input */
+.todo-header input::placeholder {
+    color: var(--text-muted);
+}
+
+/* When the input is focused (user is typing), brighten the border and add a blue glow ring */
+.todo-header input:focus {
+    border-color: var(--border-bright);
+    box-shadow: 0 0 0 3px var(--accent-glow); /* Soft outer glow instead of default browser outline */
+}
+
+/* The "+" add button — square, blue, glowing */
+.todo-header button {
+    width: 44px;
+    height: 44px;
+    background: var(--accent);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;                    /* Centers the + icon vertically */
+    justify-content: center;               /* Centers the + icon horizontally */
+    flex-shrink: 0;                         /* Prevents the button from shrinking when input is long */
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 0 16px var(--accent-glow); /* Ambient blue glow around the button */
+}
+
+/* On hover: slightly lighten the button and scale it up for a satisfying click feel */
+.todo-header button:hover {
+    background: #5aadff;
+    transform: scale(1.05);
+    box-shadow: 0 0 24px rgba(59, 158, 255, 0.45); /* Stronger glow on hover */
+}
+
+/* On click: slightly shrink to simulate being pressed */
+.todo-header button:active {
+    transform: scale(0.97);
+}
+
+/* The unordered list that holds all task items — stacked vertically with gaps between items */
+.todo-container ul {
+    list-style: none;                       /* Remove default bullet points */
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 8px;                               /* Space between each task item */
 }
 
-.todo {
-    width: 400px;
-}
-
-.todo-container h2 {
-    padding: 10px;
-    font-family: 'Candal', sans-serif;
-    font-size: 2em;
-}
-
-.todo-header input {
-    width: 92%;
-    border: none;
-    border-radius: 5px;
-    height: 20px;
-    font-family: 'Candal', sans-serif;
-}
-
-.todo-header button {
-    color: white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    padding: 5px;
-    font-family: 'Candal', sans-serif;
-    background-color: rgb(51, 212, 100);
-}
-
-.todo-container ul {
-    list-style: none;
-}
-
+/* Individual task list item — dark card with rounded corners and a subtle border */
 .todo-list-item {
-    padding: 10px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    font-family: 'Candal', sans-serif;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
     display: flex;
-    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text);
+    transition: border-color 0.2s, background 0.2s;
+    animation: slideIn 0.25s ease both;    /* Plays once when item is added to the DOM */
 }
 
+/* Slide-in animation for new tasks — fades in from slightly below their final position */
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); } /* Start invisible, shifted down */
+    to { opacity: 1; transform: translateY(0); }     /* End fully visible, in position */
+}
+
+/* On hover: brighten border and slightly lighten background to show the item is interactive */
+.todo-list-item:hover {
+    border-color: var(--border-bright);
+    background: #17202f;
+}
+
+/* Decorative "//" prefix before each task — resembles a code comment for a dev/futuristic aesthetic */
+.todo-list-item::before {
+    content: '//';
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    flex-shrink: 0;                         /* Prevents it from shrinking in the flex row */
+    opacity: 0.6;                           /* Slightly faded so it doesn't compete with task text */
+}
+
+/* The task text itself — takes up all remaining space in the row */
+.todo-list-item-name {
+    flex: 1;
+    color: var(--text);
+}
+
+/* Edit button (pencil icon) — blue tinted icon button */
+.todo-list-item .edit {
+    color: var(--accent);
+    text-decoration: none;                  /* Remove underline since it's an <a> tag */
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(59, 158, 255, 0.1);    /* Faint blue fill */
+    border: 1px solid rgba(59, 158, 255, 0.2);
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    font-size: 0.8rem;
+}
+
+/* On hover: brighten the edit button background and border, scale up slightly */
+.todo-list-item .edit:hover {
+    background: rgba(59, 158, 255, 0.2);
+    border-color: rgba(59, 158, 255, 0.5);
+    transform: scale(1.1);
+}
+
+/* Delete/remove button (X icon) — red tinted icon button */
+.todo-list-item .remove {
+    color: var(--danger);
+    text-decoration: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 77, 109, 0.1);    /* Faint red fill */
+    border: 1px solid rgba(255, 77, 109, 0.2);
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    font-size: 0.8rem;
+}
+
+/* On hover: brighten the delete button and scale up to warn the user before they click */
+.todo-list-item .remove:hover {
+    background: var(--danger-glow);
+    border-color: rgba(255, 77, 109, 0.5);
+    transform: scale(1.1);
+}
+
+/* ===================== EDIT MODE STYLES ===================== */
+/* These styles apply to the inline edit form shown when clicking the pencil icon */
+
+/* The edit form row inside a task item — fills full width and lays out horizontally */
 .todo-list-item form {
     width: 100%;
     display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
+/* The text input shown in edit mode — darker background with a visible blue focus ring */
 .todo-list-item input {
-    flex-grow: 2;
-    margin-right: 20px;
-    border: none;
-    border-radius: 5px;
-    font-family: 'Candal', sans-serif;
+    flex: 1;
+    background: var(--bg);                  /* Slightly darker than surface-2 to indicate edit mode */
+    border: 1px solid var(--border-bright); /* Bright border to show it's actively selected */
+    border-radius: 7px;
+    padding: 8px 12px;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--accent-glow); /* Persistent glow to indicate active editing */
 }
 
+/* "Confirm" button inside the edit form — blue, compact */
 .todo-list-item button {
-    color: white;
+    padding: 8px 14px;
+    background: var(--accent);
     border: none;
-    border-radius: 5px;
+    border-radius: 7px;
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 600;
     cursor: pointer;
-    padding: 5px;
-    font-family: 'Candal', sans-serif;
-    background-color: rgb(51, 212, 100);
+    white-space: nowrap;                    /* Prevent text from wrapping inside the button */
+    transition: background 0.2s, transform 0.15s;
 }
 
+/* On hover: lighten confirm button and scale up slightly */
+.todo-list-item button:hover {
+    background: #5aadff;
+    transform: scale(1.03);
+}
+
+/* "Cancel" link styled as a button — red tinted to indicate a destructive/dismissive action */
 .todo-list-item .cancel {
-    color: white;
-    text-decoration: none;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 5px;
-    font-family: 'Candal', sans-serif;
-    background-color: rgb(223, 43, 43);
-    margin-left: 5px;
+    padding: 8px 14px;
+    background: rgba(255, 77, 109, 0.1);
+    border: 1px solid rgba(255, 77, 109, 0.3);
+    border-radius: 7px;
+    color: var(--danger);
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;                  /* Remove underline since it's an <a> tag */
+    white-space: nowrap;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-flex;                   /* Allows vertical centering of the text */
+    align-items: center;
 }
 
-.todo-list-item div {
-    flex-grow: 2;
-}
-
-.todo-list-item .edit {
-    color: rgb(143, 233, 58);
-    margin-right: 10px;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-.todo-list-item .remove {
-    color: rgb(243, 96, 96);
-    margin-right: 5px;
-    cursor: pointer;
-    text-decoration: none;
+/* On hover: deepen the red background of the cancel button */
+.todo-list-item .cancel:hover {
+    background: var(--danger-glow);
+    transform: scale(1.03);
 }

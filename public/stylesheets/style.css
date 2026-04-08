@@ -108,7 +108,7 @@ body::after {
     margin-bottom: 28px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 12px; /* Space between the animated dot and the heading text */
 }
 
 /* Animated cyan dot that appears before the heading text.
@@ -116,8 +116,8 @@ body::after {
 .todo-container h2::before {
     content: '';
     display: inline-block;
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     background: var(--accent-2);            /* Cyan color */
     border-radius: 50%;                     /* Makes it a circle */
     box-shadow: 0 0 10px var(--accent-2);   /* Glowing effect around the dot */
@@ -127,7 +127,7 @@ body::after {
 /* Pulse animation — smoothly scales down and fades the dot to simulate a heartbeat/status pulse */
 @keyframes pulse {
     0%, 100% { opacity: 1; transform: scale(1); }      /* Fully visible at start and end */
-    50% { opacity: 0.5; transform: scale(0.8); }       /* Fades and shrinks at midpoint */
+    50% { opacity: 0.5; transform: scale(0.9); }       /* Fades and shrinks at midpoint */
 }
 
 /* Inner wrapper that holds the form and task list — fills full width of the card */
@@ -235,7 +235,6 @@ body::after {
 
 /* Decorative "//" prefix before each task — resembles a code comment for a dev/futuristic aesthetic */
 .todo-list-item::before {
-    content: '//';
     color: var(--accent);
     font-size: 0.75rem;
     font-family: var(--font-mono);
@@ -245,8 +244,10 @@ body::after {
 
 /* The task text itself — takes up all remaining space in the row */
 .todo-list-item-name {
-    flex: 1;
+    flex: 1;                                /* Takes up all available space between the prefix and buttons */
     color: var(--text);
+    order: -2;                             /* Moves the task text before the ::before prefix in the visual order */
+    text-align: left;      /* forces text to align left */
 }
 
 /* Edit button (pencil icon) — blue tinted icon button */
@@ -358,8 +359,65 @@ body::after {
     align-items: center;
 }
 
+/* This is for check button in edit mode to mark task as completed */
 /* On hover: deepen the red background of the cancel button */
 .todo-list-item .cancel:hover {
     background: var(--danger-glow);
     transform: scale(1.03);
+}
+
+/* Completed task item — slightly faded to show it's done */
+.todo-list-item.done {
+    opacity: 0.5;
+}
+
+/* Strikethrough on completed task text */
+.strikethrough {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+.check-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    border: 1.5px solid var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.check-btn.checked {
+    color: green;
+}
+
+.check-btn:hover {
+    box-shadow: none;
+    transform: scale(1.05);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+
+/* Stops the check button form from inheriting the edit form width */
+.check-form {
+    width: auto !important;
+    display: inline-flex;
+}
+
+/* Stops the check button from inheriting the blue edit mode button styles */
+.check-form button {
+    width: auto;
+    height: auto;
+    background: none;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    font-size: 1.1rem;
 }

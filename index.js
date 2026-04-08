@@ -30,7 +30,8 @@ app.set("view engine", "ejs"); //set the view engine to ejs, which allows us to 
 app.get('/', async (req, res) => {
     try {
         const tasks = await TodoTask.find({});  //fetch all to-do tasks from the database using the TodoTask model
-        res.render('todo.ejs', { todoTasks: tasks });  //render the "todo.ejs" template and pass the fetched tasks as a variable called "todoTasks"
+        const remaining = await TodoTask.countDocuments({ completed: false });  //calculate the number of remaining tasks by counting documents where completed is false
+        res.render('todo', { todoTasks: tasks, remaining: remaining });  //render the "todo.ejs" template and pass the fetched tasks and the count of remaining tasks as variables
     } catch (error) {
         console.error("Error fetching todo tasks:", error);
         res.status(500).send("Error fetching todo tasks");

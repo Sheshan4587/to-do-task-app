@@ -26,7 +26,7 @@
             <!-- Form submits new todo content to the server using POST /. -->
             <form action="/" method="POST" class="todo-header">
                 <!-- Text input where user types a task. -->
-                <input type="text" name="content">
+                <input type="text" name="content" required minlength="1">
                 <!-- Submit button with plus icon to add a task. -->
                 <button type="submit"><span class="fas fa-plus"></span></button>
             <!-- Closes the form. -->

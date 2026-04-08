@@ -23,6 +23,10 @@
     <!-- Main wrapper for the todo app layout. -->
     <div class="todo-container">
         <h2>To-Do List</h2>
+        <!-- Remaining tasks -->
+        <p class="task-counter">
+            <%= remaining %> task<%= remaining === 1 ? '' : 's' %> remaining.
+        </p>
         <!-- Container for form and list content. -->
         <div class="todo">
             <!-- Form submits new todo content to the server using POST /. -->
@@ -33,6 +37,12 @@
                 <button type="submit"><span class="fas fa-plus"></span></button>
                 <!-- Closes the form. -->
             </form>
+
+            <!-- Sort by date -->
+            <div class="sort-btns">
+                <a href="/?sort=newest" class="sort-btn">Newest</a>
+                <a href="/?sort=oldest" class="sort-btn">Oldest</
+            </div> 
 
             <!-- Starts unordered list that displays all todo items. -->
             <ul class="todo-list">

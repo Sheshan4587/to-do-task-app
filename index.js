@@ -90,3 +90,18 @@ app.route('/edit/:id').get(async (req, res) => {
     }
 });
 
+app.route('/complete/:id').post(async (req, res) => {
+    try {
+        const id = req.params.id;  //get the id of the to-do task to be marked as completed from the URL parameters
+        const task = await TodoTask.findById(id);  //find the to-do task with the specified id in the database using the TodoTask model
+        if (!task) {
+            return res.status(404).send("Task not found");
+        }
+        task.completed = !task.completed;  //toggle the completed status of the task
+        await task.save();  //save the updated task back to the database
+        res.redirect('/');  //redirect the user back to the root URL after updating the task
+    } catch (error) {
+        console.error("Error toggling completion status of todo task:", error);  //log an error message to the console if there is an issue updating the task in the database
+        res.status(500).send("Error toggling completion status of todo task");  //send an error response if there is an issue updating the task in the database
+    }
+});

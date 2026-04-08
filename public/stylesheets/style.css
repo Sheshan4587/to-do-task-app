@@ -421,3 +421,12 @@ body::after {
     box-shadow: none;
     font-size: 1.1rem;
 }
+
+/* Task counter below the heading — shows how many tasks are remaining */
+.task-counter {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    letter-spacing: 0.05em;
+}

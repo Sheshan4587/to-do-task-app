@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true })); //middleware to parse the body 
 app.use("/static", express.static("public"));  //middleware to serve static files from the "public" directory when the URL starts with "/static". For example, if you have a file called "style.css" in the "public" directory, you can access it at "http://localhost:3000/static/style.css".
 
 // Connect to MongoDB using Mongoose
-mongoose.connect(process.env.DB_CONNECT).then(() => {
+mongoose.connect(process.env.DB_CONNECT).then(() => {  //connect to the MongoDB database using the connection string stored in the environment variable "DB_CONNECT".
     console.log("Connected to MongoDB!");  //log a message to the console when the connection to MongoDB is successful
     app.listen(3000, () => {
         console.log('App listening on port 3000!');   //log a message to the console when the server starts listening on port 3000

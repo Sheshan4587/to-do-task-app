@@ -635,3 +635,33 @@ body::after {
     color: var(--danger);
     border: 1px solid rgba(255, 77, 109, 0.2);
 }
+/* Filter buttons container */
+.filter-btns {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+/* Individual filter button */
+.filter-btn {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 5px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+/* Active filter button — cyan to distinguish from sort buttons */
+.filter-btn.active {
+    color: var(--accent-2);
+    border-color: var(--accent-2);
+    background: rgba(0, 245, 196, 0.1);
+}
+
+.filter-btn:hover {
+    color: var(--accent-2);
+    border-color: rgba(0, 245, 196, 0.4);
+}

@@ -39,10 +39,18 @@
                     <option value="personal">Personal</option>
                     <option value="study">Study</option>
                 </select>
+                <input type="date" name="dueDate" class="due-date-input">
                 <!-- Submit button with plus icon to add a task. -->
                 <button type="submit"><span class="fas fa-plus"></span></button>
                 <!-- Closes the form. -->
             </form>
+
+            <!-- Filter by status -->
+            <div class="filter-btns">
+                <a href="/?filter=All" class="filter-btn <%= activeFilter === 'All' ? 'active' : '' %>">All</a>
+                <a href="/?filter=Active" class="filter-btn <%= activeFilter === 'Active' ? 'active' : '' %>">Active</a>
+                <a href="/?filter=Completed" class="filter-btn <%= activeFilter === 'Completed' ? 'active' : '' %>">Completed</a>
+            </div>
 
             <!-- Sort by date -->
             <div class="sort-btns">
@@ -72,6 +80,12 @@
                                 <span class="category-badge category-<%= details.category%>">
                                     <%= details.category %>
                                 </span>
+                                <!-- Show due date if it exists -->
+                                <% if (details.dueDate) { %>
+                                    <span class="due-date">
+                                        Due: <%= details.dueDate.toLocaleDateString() %>
+                                    </span>
+                                <% } %>
                                 <!-- Link to edit this specific task using its MongoDB id. -->
                                 <a href="/edit/<%= details._id %>" class="edit">
                                     <!-- Edit icon. -->

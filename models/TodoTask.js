@@ -17,6 +17,10 @@ const todoTaskSchema = new mongoose.Schema({
     completed: {
         type: Boolean,
         default: false //Every new task is initially marked as not completed
+    },
+    category: {
+        type: String,
+        default: 'general' //Every new task is initially categorized as "General"
     }
 });
 

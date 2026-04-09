@@ -29,9 +29,10 @@ app.set("view engine", "ejs"); //set the view engine to ejs, which allows us to 
 
 app.get('/', async (req, res) => {
     try {
-        const tasks = await TodoTask.find({});  //fetch all to-do tasks from the database using the TodoTask model
+        const sort = req.query.sort === 'oldest' ? { date: 1 } : { date: -1 };  //get the sort query parameter from the URL to determine the sorting order of the tasks 1 means ascending order (oldest first) and -1 means descending order (newest first)
+        const tasks = await TodoTask.find({}).sort(sort);  //fetch all to-do tasks from the database using the TodoTask model
         const remaining = await TodoTask.countDocuments({ completed: false });  //calculate the number of remaining tasks by counting documents where completed is false
-        res.render('todo', { todoTasks: tasks, remaining: remaining });  //render the "todo.ejs" template and pass the fetched tasks and the count of remaining tasks as variables
+        res.render('todo', { todoTasks: tasks, remaining: remaining , sortOrder: sort});  //render the "todo.ejs" template and pass the fetched tasks and the count of remaining tasks as variables
     } catch (error) {
         console.error("Error fetching todo tasks:", error);
         res.status(500).send("Error fetching todo tasks");

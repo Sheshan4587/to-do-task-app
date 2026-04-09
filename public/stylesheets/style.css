@@ -303,6 +303,7 @@ body::after {
 .todo-list-item form {
     width: 100%;
     display: flex;
+    flex-wrap: wrap; /* Allows the form to wrap on smaller screens */
     align-items: center;
     gap: 8px;
 }
@@ -591,4 +592,46 @@ body::after {
     background: rgba(155, 109, 255, 0.15);
     color: #9b6dff;
     border: 1px solid rgba(155, 109, 255, 0.3);
+}
+/*due date styles */
+/* Due date input in the add task form */
+.due-date-input {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0 10px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    outline: none;
+    height: 36px;
+    width: 130px;
+    transition: border-color 0.2s;
+    color-scheme: dark;                     /* makes the date picker calendar dark themed */
+}
+
+.due-date-input:focus {
+    border-color: var(--border-bright);
+}
+
+/* Due date badge shown on each task */
+.due-date {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 5px;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+    background: rgba(59, 158, 255, 0.1);
+    color: var(--accent);
+    border: 1px solid rgba(59, 158, 255, 0.2);
+    white-space: nowrap;                    /* prevents date from wrapping to a new line */
+}
+
+/* Overdue badge — turns red when the due date has passed */
+.due-date.overdue {
+    background: rgba(255, 77, 109, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(255, 77, 109, 0.2);
 }

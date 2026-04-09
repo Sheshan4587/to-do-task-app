@@ -25,7 +25,7 @@
         <h2>To-Do List</h2>
         <!-- Remaining tasks -->
         <p class="task-counter">
-            <%= remaining %> task<%= remaining === 1 ? '' : 's' %> remaining.
+            <%= remaining %> task<%= remaining===1 ? '' : 's' %> remaining.
         </p>
         <!-- Container for form and list content. -->
         <div class="todo">
@@ -33,6 +33,12 @@
             <form action="/" method="POST" class="todo-header">
                 <!-- Text input where user types a task. -->
                 <input type="text" name="content" required minlength="1" placeholder="Add Task">
+                <select name="category" class="category-select">
+                    <option value="general">General</option>
+                    <option value="work">Work</option>
+                    <option value="personal">Personal</option>
+                    <option value="study">Study</option>
+                </select>
                 <!-- Submit button with plus icon to add a task. -->
                 <button type="submit"><span class="fas fa-plus"></span></button>
                 <!-- Closes the form. -->
@@ -40,9 +46,9 @@
 
             <!-- Sort by date -->
             <div class="sort-btns">
-                <a href="/?sort=newest" class="sort-btn"<%= sortOrder.date === -1 ? ' active' : '' %>>Newest</a>
-                <a href="/?sort=oldest" class="sort-btn"<%= sortOrder.date === 1 ? ' active' : '' %>>Oldest</a>
-            </div> 
+                <a href="/?sort=newest" class="sort-btn" <%=sortOrder.date===-1 ? ' active' : '' %>>Newest</a>
+                <a href="/?sort=oldest" class="sort-btn" <%=sortOrder.date===1 ? ' active' : '' %>>Oldest</a>
+            </div>
 
             <!-- Starts unordered list that displays all todo items. -->
             <ul class="todo-list">
@@ -51,28 +57,34 @@
                         <!-- One list item for each task. -->
                         <li class="todo-list-item <%= details.completed ? 'done' : '' %>">
 
-                            <%# This one visually indicates if the task is completed or not by showing a check icon and applying styles. %>
-                            <form action="/complete/<%= details._id %>" method="POST" class="check-form">
-                                <button type="submit" class="check-btn <%= details.completed ? 'checked' : '' %>">
-                                    <span class="fas <%= details.completed ? 'fa-check-circle' : 'fa-circle' %>"></span>
-                                </button>
-                            </form>
-                            <div class="todo-list-item-name <%= details.completed ? 'strikethrough' : '' %>">
-                                <%= details.content %>
-                            </div>
-                            <!-- Link to edit this specific task using its MongoDB id. -->
-                            <a href="/edit/<%= details._id %>" class="edit">
-                                <!-- Edit icon. -->
-                                <span class="fas fa-edit"></span>
-                                <!-- Closes edit link. -->
-                            </a>
-                            <!-- Link to remove this specific task using its MongoDB id. -->
-                            <a href="#" class="remove" onclick="confirmdelete('<%= details._id %>')">
-                                <!-- Remove icon. -->
-                                <span class="fas fa-times"></span>
-                                <!-- Closes remove link. -->
-                            </a>
-                            <!-- Closes one task list item. -->
+                            <%# This one visually indicates if the task is completed or not by showing a check icon and
+                                applying styles. %>
+                                <form action="/complete/<%= details._id %>" method="POST" class="check-form">
+                                    <button type="submit" class="check-btn <%= details.completed ? 'checked' : '' %>">
+                                        <span
+                                            class="fas <%= details.completed ? 'fa-check-circle' : 'fa-circle' %>"></span>
+                                    </button>
+                                </form>
+                                <div class="todo-list-item-name <%= details.completed ? 'strikethrough' : '' %>">
+                                    <%= details.content %>
+                                </div>
+                                <!-- Filter by category -->
+                                <span class="category-badge category-<%= details.category%>">
+                                    <%= details.category %>
+                                </span>
+                                <!-- Link to edit this specific task using its MongoDB id. -->
+                                <a href="/edit/<%= details._id %>" class="edit">
+                                    <!-- Edit icon. -->
+                                    <span class="fas fa-edit"></span>
+                                    <!-- Closes edit link. -->
+                                </a>
+                                <!-- Link to remove this specific task using its MongoDB id. -->
+                                <a href="#" class="remove" onclick="confirmdelete('<%= details._id %>')">
+                                    <!-- Remove icon. -->
+                                    <span class="fas fa-times"></span>
+                                    <!-- Closes remove link. -->
+                                </a>
+                                <!-- Closes one task list item. -->
                         </li>
                         <%# Ends the forEach loop over todo tasks. %>
                             <% }) %>
@@ -96,11 +108,11 @@
 <script>
     function confirmdelete(id) {
         document.getElementById('delete-overlay').style.display = 'flex';
-        document.getElementById('confirm-delete-btn').onclick = function() {
+        document.getElementById('confirm-delete-btn').onclick = function () {
             window.location.href = '/remove/' + id;
         };
     }
     function canceldelete() {
         document.getElementById('delete-overlay').style.display = 'none';
-            }
+    }
 </script>

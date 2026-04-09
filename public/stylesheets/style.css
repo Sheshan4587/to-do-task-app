@@ -463,16 +463,18 @@ body::after {
     border-color: var(--border-bright);
 }
 
-</* confirm delete dialog styles */
+/* confirm delete dialog styles */
 /* Full screen dark overlay behind the dialog */
 #delete-overlay {
     position: fixed;
-    inset: 0;
+    inset: 0;                              /* this is for handling all 4 sides (top, right, bottom, left) at once */
     background: rgba(0, 0, 0, 0.6);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 100;
+    backdrop-filter: blur(4px);             /* blurs everything behind the overlay */
+    -webkit-backdrop-filter: blur(4px);     /* Safari support */
 }
 
 /* Dialog box */

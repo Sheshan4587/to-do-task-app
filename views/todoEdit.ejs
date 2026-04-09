@@ -22,6 +22,12 @@
                         <li class="todo-list-item">
                             <form action="/edit/<%= details._id %>" method="POST">
                                 <input type="text" value="<%= details.content %>" name="content">
+                                <select name="category" class="category-select">
+                                    <option value="general" <%= details.category === 'general' ? 'selected' : '' %>>General</option>
+                                    <option value="work" <%= details.category === 'work' ? 'selected' : '' %>>Work</option>
+                                    <option value="personal" <%= details.category === 'personal' ? 'selected' : '' %>>Personal</option>
+                                    <option value="study" <%= details.category === 'study' ? 'selected' : '' %>>Study</option>
+                                </select>
                                 <button type="submit">Confirm</button>
                                 <a href="/" class="cancel">Cancel</a>
                             </form>

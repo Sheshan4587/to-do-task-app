@@ -21,6 +21,10 @@ const todoTaskSchema = new mongoose.Schema({
     category: {
         type: String,
         default: 'general' //Every new task is initially categorized as "General"
+    },
+    dueDate: {
+        type: Date,
+        default: null //Every new task has no due date by default
     }
 });
 

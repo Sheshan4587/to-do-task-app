@@ -536,3 +536,59 @@ body::after {
 #confirm-delete-btn:hover {
     background: rgba(255, 77, 109, 0.3);
 }
+
+/* dropdown styles */
+/* Dropdown for selecting task category */
+.category-select {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0 10px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    outline: none;
+    height: 44px;
+    transition: border-color 0.2s;
+}
+
+.category-select:focus {
+    border-color: var(--border-bright);
+}
+
+/* Base badge style */
+.category-badge {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+}
+
+/* Badge colors for each category */
+.category-general {
+    background: rgba(107, 127, 163, 0.15);
+    color: var(--text-muted);
+    border: 1px solid rgba(107, 127, 163, 0.3);
+}
+
+.category-work {
+    background: rgba(59, 158, 255, 0.15);
+    color: var(--accent);
+    border: 1px solid rgba(59, 158, 255, 0.3);
+}
+
+.category-personal {
+    background: rgba(0, 245, 196, 0.15);
+    color: var(--accent-2);
+    border: 1px solid rgba(0, 245, 196, 0.3);
+}
+
+.category-study {
+    background: rgba(155, 109, 255, 0.15);
+    color: #9b6dff;
+    border: 1px solid rgba(155, 109, 255, 0.3);
+}

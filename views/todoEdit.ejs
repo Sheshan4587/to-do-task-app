@@ -28,6 +28,7 @@
                                     <option value="personal" <%= details.category === 'personal' ? 'selected' : '' %>>Personal</option>
                                     <option value="study" <%= details.category === 'study' ? 'selected' : '' %>>Study</option>
                                 </select>
+                                <input type="date" name="dueDate" class="due-date-input" value="<%= details.dueDate ? details.dueDate.toISOString().split('T')[0] : '' %>">
                                 <button type="submit">Confirm</button>
                                 <a href="/" class="cancel">Cancel</a>
                             </form>

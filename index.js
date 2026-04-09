@@ -41,7 +41,8 @@ app.get('/', async (req, res) => {
 
 app.post('/', async (req, res) => {
     const todoTask = new TodoTask({
-        content: req.body.content  //create a new instance of the TodoTask model with the content from the request body
+        content: req.body.content,  //create a new instance of the TodoTask model with the content from the request body
+        category: req.body.category  //set the category of the task from the request body
     });
     try {
         await todoTask.save();  //save the new to-do task to the database
@@ -81,7 +82,7 @@ app.route('/edit/:id').get(async (req, res) => {
 }).post(async (req, res) => {
     try {
         const id = req.params.id;  //get the id of the to-do task to be edited from the URL parameters
-        const updatedTask = await TodoTask.findByIdAndUpdate(id, { content: req.body.content });  //update the content of the to-do task with the specified id in the database using the TodoTask model
+        const updatedTask = await TodoTask.findByIdAndUpdate(id, { content: req.body.content, category: req.body.category });  //update the content and category of the to-do task with the specified id in the database using the TodoTask model
         if (!updatedTask) {
             return res.status(404).send("Task not found");
         }

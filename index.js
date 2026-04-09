@@ -30,9 +30,15 @@ app.set("view engine", "ejs"); //set the view engine to ejs, which allows us to 
 app.get('/', async (req, res) => {
     try {
         const sort = req.query.sort === 'oldest' ? { date: 1 } : { date: -1 };  //get the sort query parameter from the URL to determine the sorting order of the tasks 1 means ascending order (oldest first) and -1 means descending order (newest first)
-        const tasks = await TodoTask.find({}).sort(sort);  //fetch all to-do tasks from the database using the TodoTask model
+        let filter = {};  //initialize an empty filter object to store the filtering criteria for fetching tasks from the database
+        if(req.query.filter === 'Active') {
+            filter.completed = false;  //if the filter query parameter is set to "Active", add a condition to the filter object to only fetch tasks that are not completed
+        }if(req.query.filter === 'Completed') {
+            filter.completed = true;  //if the filter query parameter is set to "Completed", add a condition to the filter object to only fetch tasks that are completed
+        }
+        const tasks = await TodoTask.find(filter).sort(sort);  //fetch all to-do tasks from the database using the TodoTask model
         const remaining = await TodoTask.countDocuments({ completed: false });  //calculate the number of remaining tasks by counting documents where completed is false
-        res.render('todo', { todoTasks: tasks, remaining: remaining , sortOrder: sort});  //render the "todo.ejs" template and pass the fetched tasks and the count of remaining tasks as variables
+        res.render('todo', { todoTasks: tasks, remaining: remaining , sortOrder: sort, activeFilter: req.query.filter || 'All' });  //render the "todo.ejs" template and pass the fetched tasks and the count of remaining tasks as variables
     } catch (error) {
         console.error("Error fetching todo tasks:", error);
         res.status(500).send("Error fetching todo tasks");
@@ -42,7 +48,8 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
     const todoTask = new TodoTask({
         content: req.body.content,  //create a new instance of the TodoTask model with the content from the request body
-        category: req.body.category  //set the category of the task from the request body
+        category: req.body.category,  //set the category of the task from the request body
+        dueDate: req.body.dueDate  //set the due date of the task from the request body
     });
     try {
         await todoTask.save();  //save the new to-do task to the database
@@ -82,7 +89,7 @@ app.route('/edit/:id').get(async (req, res) => {
 }).post(async (req, res) => {
     try {
         const id = req.params.id;  //get the id of the to-do task to be edited from the URL parameters
-        const updatedTask = await TodoTask.findByIdAndUpdate(id, { content: req.body.content, category: req.body.category });  //update the content and category of the to-do task with the specified id in the database using the TodoTask model
+        const updatedTask = await TodoTask.findByIdAndUpdate(id, { content: req.body.content, category: req.body.category, dueDate: req.body.dueDate });  //update the content, category, and due date of the to-do task with the specified id in the database using the TodoTask model
         if (!updatedTask) {
             return res.status(404).send("Task not found");
         }

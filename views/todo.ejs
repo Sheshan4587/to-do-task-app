@@ -40,8 +40,8 @@
 
             <!-- Sort by date -->
             <div class="sort-btns">
-                <a href="/?sort=newest" class="sort-btn">Newest</a>
-                <a href="/?sort=oldest" class="sort-btn">Oldest</
+                <a href="/?sort=newest" class="sort-btn"<%= sortOrder.date === -1 ? ' active' : '' %>>Newest</a>
+                <a href="/?sort=oldest" class="sort-btn"<%= sortOrder.date === 1 ? ' active' : '' %>>Oldest</a>
             </div> 
 
             <!-- Starts unordered list that displays all todo items. -->
@@ -67,7 +67,7 @@
                                 <!-- Closes edit link. -->
                             </a>
                             <!-- Link to remove this specific task using its MongoDB id. -->
-                            <a href="/remove/<%= details._id %>" class="remove">
+                            <a href="#" class="remove" onclick="confirmdelete('<%= details._id %>')">
                                 <!-- Remove icon. -->
                                 <span class="fas fa-times"></span>
                                 <!-- Closes remove link. -->
@@ -83,4 +83,24 @@
         <!-- Closes the main todo container. -->
     </div>
     <!-- Closes the page body. -->
+    <div id="delete-overlay" style="display: none;">
+        <div class="delete-dialog">
+            <p>Are you sure you want to delete this task?</p>
+            <button id="confirm-delete-btn">Yes</button>
+            <button id="cancel-delete-btn" onclick="canceldelete()">No</button>
+        </div>
+    </div>
 </body>
+
+<!-- JavaScript function to confirm deletion of a task. -->
+<script>
+    function confirmdelete(id) {
+        document.getElementById('delete-overlay').style.display = 'flex';
+        document.getElementById('confirm-delete-btn').onclick = function() {
+            window.location.href = '/remove/' + id;
+        };
+    }
+    function canceldelete() {
+        document.getElementById('delete-overlay').style.display = 'none';
+            }
+</script>

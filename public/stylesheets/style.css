@@ -665,3 +665,44 @@ body::after {
     color: var(--accent-2);
     border-color: rgba(0, 245, 196, 0.4);
 }
+
+/* search input styles */
+/* Search bar container */
+.search-bar {
+    position: relative;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+}
+
+/* Search icon inside the input */
+.search-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    pointer-events: none;                   /* so clicking the icon focuses the input instead */
+}
+
+/* Search input field */
+.search-bar input {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 16px 10px 34px;           /* left padding makes room for the search icon */
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-bar input::placeholder {
+    color: var(--text-muted);
+}
+
+.search-bar input:focus {
+    border-color: var(--border-bright);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}

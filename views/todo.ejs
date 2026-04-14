@@ -23,10 +23,17 @@
     <!-- Main wrapper for the todo app layout. -->
     <div class="todo-container">
         <h2>To-Do List</h2>
+        <div class="search"
         <!-- Remaining tasks -->
         <p class="task-counter">
             <%= remaining %> task<%= remaining===1 ? '' : 's' %> remaining.
         </p>
+        <!-- Search bar -->
+        <div class="search-bar">
+            <span class="fas fa-search search-icon"></span>
+            <input type="text" id="search-input" placeholder="Search tasks..." oninput="filterTasks()">
+        </div> 
+        </div>
         <!-- Container for form and list content. -->
         <div class="todo">
             <!-- Form submits new todo content to the server using POST /. -->
@@ -129,4 +136,17 @@
     function canceldelete() {
         document.getElementById('delete-overlay').style.display = 'none';
     }
+    function filterTasks() {
+        const searchTerm = document.getElementById('search-input').value.toLowerCase();
+        const tasks = document.querySelectorAll('.todo-list-item'); // Selects all task list items on the page.(querySelectorAll returns a NodeList of all elements)
+        tasks.forEach(task => {
+            const taskName = task.querySelector('.todo-list-item-name').textContent.toLowerCase();
+            if (taskName.includes(searchTerm)) {
+                task.style.display = ''; // '' means default display, which will show the task if it matches the search term.
+            } else {
+                task.style.display = 'none';
+            }
+        });
+    }
+        
 </script>

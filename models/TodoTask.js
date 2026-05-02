@@ -25,12 +25,17 @@ const todoTaskSchema = new mongoose.Schema({
     dueDate: {
         type: Date,
         default: null //Every new task has no due date by default
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', // Reference to the User model, allowing us to associate each task with a specific user in the database
+        required: true // Ensure that every task must be associated with a user
     }
 });
 
 // Export the model based on the schema, which allows us to interact with the "TodoTask" collection in MongoDB using this model
 module.exports = mongoose.model('TodoTask', todoTaskSchema);
 
-/* In summary, this code defines a Mongoose schema and model for a to-do task, which includes a "content" field of type String and a
-"date" field of type Date. The model is then exported for use in other parts of the application, allowing us to interact with the "TodoTask" 
+/* In summary, this code defines a Mongoose schema and model for a to-do task, which includes a "content" field of type String, a
+"date" field of type Date, and a "userId" field that references the User model. The model is then exported for use in other parts of the application, allowing us to interact with the "TodoTask" 
 collection in MongoDB using this model. */
